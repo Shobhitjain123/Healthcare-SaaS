@@ -41,7 +41,7 @@ const buttonVariants = cva(
   }
 )
 
-function Button({
+export function Button({
   className,
   variant = "default",
   size = "default",
@@ -64,4 +64,4 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+// Intentionally not exporting non-components to satisfy Fast Refresh lint rule.
