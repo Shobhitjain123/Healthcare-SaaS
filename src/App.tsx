@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import Patients from "./modules/patients/Patients";
 import Analytics from "./modules/analytics/Analytics";
 import PatientDetails from "./modules/patient-details/PatientDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   const { authUser } = useAuthStore();
   console.log("Auth User state", authUser);
@@ -16,18 +17,22 @@ function App() {
   return (
     <>
       <Routes>
+        {/* Protected routes with layout */}
         <Route
           path="/"
           element={
-            authUser ? (
-              <Home>
-                <Dashboard />
-              </Home>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="patients" element={<Patients />} />
+          <Route path="patients/:patientId" element={<PatientDetails />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
+
+        {/* Public auth routes */}
         <Route
           path="/login"
           element={!authUser ? <Login /> : <Navigate to="/" />}
@@ -35,42 +40,6 @@ function App() {
         <Route
           path="/register"
           element={!authUser ? <Register /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/patients"
-          element={
-            authUser ? (
-              <Home>
-                <Patients />
-              </Home>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/patients/:patientId"
-          element={
-            authUser ? (
-              <Home>
-                <PatientDetails />
-              </Home>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/analytics"
-          element={
-            authUser ? (
-              <Home>
-                <Analytics />
-              </Home>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
         />
       </Routes>
       <Toaster />

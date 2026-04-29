@@ -9,29 +9,25 @@ export default function Patients() {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Patients</h2>
+      {/* View Toggle */}
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={() => setView("grid")}
+          className={`px-3 py-1 rounded-lg ${
+            view === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          Grid
+        </button>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => setView("grid")}
-            className={`px-3 py-1 rounded-lg ${
-              view === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-          >
-            Grid
-          </button>
-
-          <button
-            onClick={() => setView("list")}
-            className={`px-3 py-1 rounded-lg ${
-              view === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-          >
-            List
-          </button>
-        </div>
+        <button
+          onClick={() => setView("list")}
+          className={`px-3 py-1 rounded-lg ${
+            view === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          List
+        </button>
       </div>
 
       {/* Content */}
