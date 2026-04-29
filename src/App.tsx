@@ -4,6 +4,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import Dashboard from "./modules/dashboard/Dashboard";
 import Login from "./modules/auth/Login";
 import Register from "./modules/auth/Register";
+import { Toaster } from "react-hot-toast";
 function App() {
   const { authUser } = useAuthStore();
   console.log("Auth User state", authUser);
@@ -24,6 +25,7 @@ function App() {
           element={!authUser ? <Register /> : <Navigate to="/" />}
         />
       </Routes>
+      <Toaster />
     </>
   );
 }

@@ -1,33 +1,44 @@
 import { useState } from "react";
 import { LoginForm } from "@/components/LoginForm";
+import { loginWithEmail } from "@/services/firebaseAuth";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useLogin } from "@/services/firebaseAuth";
-
+import { validateLoginForm, type AuthFieldErrors } from "@/utils/authValidation";
+import toast from "react-hot-toast";
+import { ERROS } from "@/utils/errorConstants";
 function Auth() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  // const { login } = useAuthStore();
+  const [errors, setErrors] = useState<AuthFieldErrors>({});
 
-  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+  const { setIsLogginIn } = useAuthStore();
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      password: "",
-    });
+    const validationErrors = validateLoginForm(formData);
+    const hasValidationErrors = Object.values(validationErrors).some(Boolean);
 
-    const options = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ ...formData }),
-    };
-    useLogin(formData);
-    // login(options);
+    if (hasValidationErrors) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
+    setIsLogginIn(true);
+    try {
+      await loginWithEmail(formData);
+      setFormData({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : ERROS.LOGIN_FAILED_GENERIC,
+      );
+    } finally {
+      setIsLogginIn(false);
+    }
   }
 
   return (
@@ -35,8 +46,12 @@ function Auth() {
       <div className="w-full max-w-sm">
         <LoginForm
           formData={formData}
-          setFormData={setFormData}
+          setFormData={(value) => {
+            setFormData(value);
+            setErrors((prev) => ({ ...prev, email: undefined, password: undefined }));
+          }}
           handleLogin={handleLogin}
+          errors={errors}
         />
       </div>
     </div>

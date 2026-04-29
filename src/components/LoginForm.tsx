@@ -7,12 +7,15 @@ import { Link } from "react-router";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Loader2 } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
+import { FormFieldError } from "@/components/FormFieldError";
+import type { AuthFieldErrors } from "@/utils/authValidation";
 
 interface LoginFormProps {
   className?: string;
   formData?: { email: string; password: string };
   setFormData?: Dispatch<SetStateAction<{ email: string; password: string }>>;
   handleLogin?: (e: React.FormEvent<HTMLFormElement>) => void;
+  errors?: AuthFieldErrors;
 }
 
 export function LoginForm({
@@ -20,6 +23,7 @@ export function LoginForm({
   formData,
   setFormData,
   handleLogin,
+  errors,
   ...props
 }: LoginFormProps) {
   const { isLoggingIn } = useAuthStore();
@@ -48,6 +52,7 @@ export function LoginForm({
                     setFormData({ ...formData, email: e.target.value })
                   }
                 />
+                <FormFieldError message={errors?.email} />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -69,11 +74,12 @@ export function LoginForm({
                     setFormData({ ...formData, password: e.target.value })
                   }
                 />
+                <FormFieldError message={errors?.password} />
               </div>
               <Button type="submit" className="w-full cursor-pointer">
                 {isLoggingIn ? (
                   <>
-                    <Loader2 className="size-5 animate-spin" /> "Loading..."
+                    <Loader2 className="size-5 animate-spin" /> Loading...
                   </>
                 ) : (
                   <>Login</>
