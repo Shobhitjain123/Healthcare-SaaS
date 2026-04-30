@@ -5,6 +5,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
+  browserLocalPersistence,
+  setPersistence,
 } from "firebase/auth";
 import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
@@ -28,6 +31,11 @@ interface Credentials {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
+// Set auth persistence to LOCAL (persists across browser restarts)
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.error("Error setting auth persistence:", error);
+});
 
 const mapFirebaseAuthError = (error: AuthError): string => {
   const errorMap: Record<string, string> = {
@@ -82,7 +90,29 @@ export const loginWithEmail = async ({ email, password }: Credentials) => {
 
 // Custom hook for Firebase Logout
 export const useSignout = () => {
-  signOut(auth);
-  useAuthStore.getState().setAuthUser(false);
-  toast.success("Logout Successfull");
+  return async () => {
+    try {
+      await signOut(auth);
+      useAuthStore.getState().setAuthUser(false);
+      toast.success("Logout Successfull");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
+    }
+  };
+};
+
+// Initialize auth state listener
+export const initializeAuthListener = () => {
+  return onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is signed in:", user.email);
+      useAuthStore.getState().setAuthUser(true);
+    } else {
+      console.log("User is signed out");
+      useAuthStore.getState().setAuthUser(false);
+    }
+    // Auth check is complete
+    useAuthStore.getState().setIsAuthChecking(false);
+  });
 };

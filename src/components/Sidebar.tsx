@@ -8,7 +8,7 @@ interface SidebarProps {
 }
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
-  const signout = useSignout;
+  const signout = useSignout();
 
   return (
     <aside
