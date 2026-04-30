@@ -10,6 +10,8 @@ export const ERROS = {
   AUTH_EMAIL_ALREADY_REGISTERED: "Email is already registered.",
   AUTH_TOO_MANY_REQUESTS:
     "Too many attempts. Please try again in a few minutes.",
+  AUTH_UNAUTHORIZED_DOMAIN:
+    "This domain is not authorized for Google Sign-in. Please contact support.",
   AUTH_FAILED_GENERIC: "Authentication failed. Please try again.",
   LOGIN_FAILED_GENERIC: "Unable to login right now.",
   REGISTER_FAILED_GENERIC: "Unable to register right now.",

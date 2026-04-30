@@ -17,7 +17,6 @@ const PatientDetails = lazy(() => import("./modules/patient-details/PatientDetai
 
 function App() {
   const { authUser } = useAuthStore();
-  console.log("Auth User state", authUser);
 
   return (
     <>

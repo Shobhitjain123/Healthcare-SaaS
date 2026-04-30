@@ -50,6 +50,7 @@ const mapFirebaseAuthError = (error: AuthError): string => {
     "auth/invalid-email": ERROS.EMAIL_INVALID_FORMAT,
     "auth/email-already-in-use": ERROS.AUTH_EMAIL_ALREADY_REGISTERED,
     "auth/too-many-requests": ERROS.AUTH_TOO_MANY_REQUESTS,
+    "auth/unauthorized-domain": ERROS.AUTH_UNAUTHORIZED_DOMAIN,
   };
 
   return errorMap[error.code] ?? ERROS.AUTH_FAILED_GENERIC;
@@ -58,13 +59,11 @@ const mapFirebaseAuthError = (error: AuthError): string => {
 // Firebase Signup handler
 export const signUpWithEmail = async ({ email, password }: Credentials) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
+    await createUserWithEmailAndPassword(
       auth,
       email,
       password,
     );
-    const user = userCredential.user;
-    console.log(" Registered User from firebase", user);
     useAuthStore.getState().setAuthUser(true);
     toast.success("Registration Successsfull");
   } catch (error) {
@@ -77,13 +76,11 @@ export const signUpWithEmail = async ({ email, password }: Credentials) => {
 // Firebase Login handler
 export const loginWithEmail = async ({ email, password }: Credentials) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
+    await signInWithEmailAndPassword(
       auth,
       email,
       password,
     );
-    const user = userCredential.user;
-    console.log("Logged In User from Firebase", user);
     useAuthStore.getState().setAuthUser(true);
     toast.success("Login Successfull");
   } catch (error) {
@@ -109,9 +106,7 @@ export const useSignout = () => {
 
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    console.log("Logged In User from Google", user);
+    await signInWithPopup(auth, googleProvider);
     useAuthStore.getState().setAuthUser(true);
     toast.success("Login Successfull");
   } catch (error) {
@@ -125,10 +120,8 @@ export const signInWithGoogle = async () => {
 export const initializeAuthListener = () => {
   return onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("User is signed in:", user.email);
       useAuthStore.getState().setAuthUser(true);
     } else {
-      console.log("User is signed out");
       useAuthStore.getState().setAuthUser(false);
     }
     // Auth check is complete

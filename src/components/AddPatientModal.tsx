@@ -33,9 +33,6 @@ export function AddPatientModal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("Adding patient with data:", formData);
-    console.log("Current patients count:", patients.length);
-
     // Generate patient ID and MRN based on current store patients
     const newPatientId = `pt_${String(patients.length + 1).padStart(3, "0")}`;
     const newMrn = `MRN-${String(100000 + patients.length + 1)}`;
@@ -65,9 +62,7 @@ export function AddPatientModal() {
       status: "active",
     };
 
-    console.log("New patient object:", newPatient);
     addPatient(newPatient);
-    console.log("Patient added to store");
 
     showNotification(`Patient ${formData.firstName} ${formData.lastName} added successfully`);
 
