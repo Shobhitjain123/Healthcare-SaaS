@@ -8,6 +8,8 @@ import {
   onAuthStateChanged,
   browserLocalPersistence,
   setPersistence,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import { useAuthStore } from "@/store/useAuthStore";
 import toast from "react-hot-toast";
@@ -31,6 +33,9 @@ interface Credentials {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+
 
 // Set auth persistence to LOCAL (persists across browser restarts)
 setPersistence(auth, browserLocalPersistence).catch((error) => {
@@ -102,6 +107,20 @@ export const useSignout = () => {
   };
 };
 
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    console.log("Logged In User from Google", user);
+    useAuthStore.getState().setAuthUser(true);
+    toast.success("Login Successfull");
+  } catch (error) {
+    console.error("Google login error", error);
+    const message = mapFirebaseAuthError(error as AuthError);
+    throw new Error(message, { cause: error });
+  }
+};
+
 // Initialize auth state listener
 export const initializeAuthListener = () => {
   return onAuthStateChanged(auth, (user) => {
@@ -116,3 +135,4 @@ export const initializeAuthListener = () => {
     useAuthStore.getState().setIsAuthChecking(false);
   });
 };
+
