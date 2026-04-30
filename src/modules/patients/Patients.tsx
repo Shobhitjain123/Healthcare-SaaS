@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { GridView } from "@/components/GridView";
 import { ListView } from "@/components/ListView";
 import { AddPatientModal } from "@/components/AddPatientModal";
 import { usePatientStore } from "@/store/usePatientStore";
+import { GridSkeleton, TableSkeleton } from "@/components/LoadingSkeleton";
 
 export default function Patients() {
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -35,11 +36,13 @@ export default function Patients() {
       </div>
 
       {/* Content */}
-      {view === "grid" ? (
-        <GridView patients={patients} />
-      ) : (
-        <ListView patients={patients} />
-      )}
+      <Suspense fallback={view === "grid" ? <GridSkeleton /> : <TableSkeleton />}>
+        {view === "grid" ? (
+          <GridView patients={patients} />
+        ) : (
+          <ListView patients={patients} />
+        )}
+      </Suspense>
     </div>
   );
 }

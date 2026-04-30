@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Link } from "react-router";
 import type { Patient } from "@/mock/types";
 
-export function GridView({ patients }: { patients: Patient[] }) {
+function GridViewComponent({ patients }: { patients: Patient[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {patients.map((p) => (
@@ -45,3 +46,5 @@ export function GridView({ patients }: { patients: Patient[] }) {
     </div>
   );
 }
+
+export const GridView = memo(GridViewComponent);

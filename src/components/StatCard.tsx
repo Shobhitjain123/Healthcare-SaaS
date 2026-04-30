@@ -1,9 +1,11 @@
+import { memo } from "react";
+
 type Props = {
   title: string;
   value: string;
 };
 
-export function StatCard({ title, value }: Props) {
+function StatCardComponent({ title, value }: Props) {
   return (
     <div className="bg-white p-5 rounded-xl shadow-sm border">
       <p className="text-sm text-gray-500">{title}</p>
@@ -11,3 +13,5 @@ export function StatCard({ title, value }: Props) {
     </div>
   );
 }
+
+export const StatCard = memo(StatCardComponent);

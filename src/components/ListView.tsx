@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Link } from "react-router";
 import type { Patient } from "@/mock/types";
 
-export function ListView({ patients }: { patients: Patient[] }) {
+function ListViewComponent({ patients }: { patients: Patient[] }) {
   return (
     <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
       {/* Desktop table */}
@@ -81,3 +82,5 @@ export function ListView({ patients }: { patients: Patient[] }) {
     </div>
   );
 }
+
+export const ListView = memo(ListViewComponent);

@@ -1,11 +1,16 @@
 import { create } from "zustand";
 
+interface EmailData {
+  email: string;
+  timestamp: number;
+}
+
 type AuthStore = {
   authUser: boolean | null;
   isLoggingIn: boolean;
   isSigningUp: boolean;
   isSendingEmail: boolean;
-  sentEmailData: unknown | null;
+  sentEmailData: EmailData | null;
   isAuthChecking: boolean;
   setIsLogginIn: (value: boolean) => void;
   setIsSigningUp: (value: boolean) => void;

@@ -14,13 +14,13 @@ import toast from "react-hot-toast";
 import { ERROS } from "@/utils/errorConstants";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBb2oEzFA0R_LyA26sn_nORQB4s1d0OQb4",
-  authDomain: "healthcare-auth-36fac.firebaseapp.com",
-  projectId: "healthcare-auth-36fac",
-  storageBucket: "healthcare-auth-36fac.firebasestorage.app",
-  messagingSenderId: "470312587984",
-  appId: "1:470312587984:web:77d457199bbba01ca884d5",
-  measurementId: "G-TJJ0ZPS2DX",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 interface Credentials {
